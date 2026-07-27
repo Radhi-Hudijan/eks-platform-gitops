@@ -34,7 +34,7 @@ ingress:
 # Horizonatal pod autoscaling configuration (scales based on CPU usage)
 autoscaling:
   enabled: true
-  minReplicas: 2
+  minReplicas: 3
   maxReplicas: 4
   targetCPUUtilizationPercentage: 80
 

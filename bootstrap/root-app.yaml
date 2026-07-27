@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Radhi-Hudijan/eks-platform-gitops.git
+    targetRevision: main
+    path: argocd # watch the whole argocd directory and all subdirectories for changes
+    directory:
+      recurse: true # Look inside subfolder (projects+applications) for ArgoCD applications
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd # create the apps/appprojects in the argocd namespace
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

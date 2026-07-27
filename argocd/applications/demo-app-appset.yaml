@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: demo-app
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+  - list:
+      elements:
+      - env: dev
+      - env: prod
+  template:
+    metadata:
+      name: 'demo-app-{{.env}}'
+    spec:
+      project: demo-project
+      source:
+        repoURL: https://github.com/Radhi-Hudijan/eks-platform-gitops.git
+        targetRevision: main
+        path: apps/demo-app/helm
+        helm:
+          valueFiles:
+          - values.yaml
+          - 'values-{{.env}}.yaml'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{.env}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true

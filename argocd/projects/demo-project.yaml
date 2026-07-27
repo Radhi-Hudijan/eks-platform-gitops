@@ -16,6 +16,10 @@ spec:
     server: https://kubernetes.default.svc
   - namespace: demo
     server: https://kubernetes.default.svc
+  - namespace: dev
+    server: https://kubernetes.default.svc
+  - namespace: prod
+    server: https://kubernetes.default.svc
   # Deny all cluster-scoped resources from being created, except for Namespace
   clusterResourceWhitelist:
   - group: ''
