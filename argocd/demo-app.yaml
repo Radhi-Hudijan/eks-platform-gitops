@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-app
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Radhi-Hudijan/eks-platform-gitops.git
+    targetRevision: main
+    path: apps/demo-app/helm
+
+    helm:
+      valueFiles:
+      - values-prod.yaml
+
+  # Destination cluster and namespace to deploy the application
+  destination:
+    # cluster API URL
+    server: https://kubernetes.default.svc
+    namespace: demo
+
+  # Sync policy
+  syncPolicy:
+    automated:
+      prune: true # Specifies if resources should be pruned during auto-syncing ( false by default ).
+      selfHeal: true # Specifies if partial app sync should be executed when resources are changed only in target Kubernetes cluster and no git change detected ( false by default ).
+    syncOptions:
+    # Sync options which modifies sync behavior
+    - CreateNamespace=true # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.
