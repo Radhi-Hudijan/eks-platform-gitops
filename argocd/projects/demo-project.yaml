@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: demo-project
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Governance boundary for the demo apps
+  # Allow manifests to deploy from any Git repos
+  sourceRepos:
+  - https://github.com/Radhi-Hudijan/eks-platform-gitops.git
+  # Only permit applications to deploy to the argocd & demo namespaces in the same cluster
+  destinations:
+  - namespace: argocd
+    server: https://kubernetes.default.svc
+  - namespace: demo
+    server: https://kubernetes.default.svc
+  # Deny all cluster-scoped resources from being created, except for Namespace
+  clusterResourceWhitelist:
+  - group: ''
+    kind: Namespace
+  # Deny all namespaced-scoped resources from being created, except for the following
+  namespaceResourceWhitelist:
+  - group: '*'
+    kind: "*"

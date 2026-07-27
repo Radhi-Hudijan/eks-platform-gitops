@@ -7,7 +7,7 @@ metadata:
   - resources-finalizer.argocd.argoproj.io
 
 spec:
-  project: default
+  project: demo-project
   source:
     repoURL: https://github.com/Radhi-Hudijan/eks-platform-gitops.git
     targetRevision: main
